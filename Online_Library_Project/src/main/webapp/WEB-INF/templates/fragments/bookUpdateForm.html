@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+
+<th:block th:fragment="ajaxLoadedContent">
+
+	<div class="container inner" 
+		style="margin-top: 120px;margin-bottom: 100px;font-family: Rajdhani, sans-serif;color: #12044F;font-weight: 700;">
+		<div class="text-center text-uppercase pt-3"> 
+        	<h3 th:text="${'Book Update Form'}"></h3>
+            <hr>
+       	</div>
+            
+        <div class="row mt-2">
+            <div  class="col-md-6 offset-md-3 sigup_form">
+            	<div class="sigup_form">
+					<form class="mt-3" method="POST" id="bookForm"  th:object="${book}" enctype="multipart/form-data">
+		
+						<input type="hidden" name="bookId" th:value="${currentBook.bookId}">
+						
+						<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Book Name:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="name"
+                          		name="name"  
+                          		th:placeholder="${'Enter Book Name'}"
+                          		th:value="${currentBook.name}"
+                          	/> 
+            				<span class="text-danger" id="nameError" 
+            					th:text="${'Please provide book name!'}" 
+            					style="visibility: hidden">
+            				</span>    
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Publisher:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="publisher"
+                          		name="publisher"  
+                          		th:placeholder="${'Enter Publisher'}"
+                          		th:value="${currentBook.publisher}"
+                          	/> 
+            				<span class="text-danger" id="publisherError" 
+            					th:text="${'Please provide publisher!'}" 
+            					style="visibility: hidden">
+            				</span>  
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Author:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="author"
+                          		name="author"  
+                          		th:placeholder="${'Enter Author'}"
+                          		th:value="${currentBook.author}"
+                          	/> 
+            				<span class="text-danger" id="authorError"
+            					th:text="${'Please provide author!'}" 
+            					style="visibility: hidden">
+            				</span>
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Description:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="description"
+                          		name="description"  
+                          		th:placeholder="${'Enter Short Description'}"
+                          		th:value="${currentBook.description}"
+                          	/> 
+            				<span class="text-danger" id="descriptionError" 
+            					th:text="${'Please provide description!'}" 
+            					style="visibility: hidden">
+            				</span>
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Language:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="language"
+                          		name="language"  
+                          		th:placeholder="${'Enter Language'}"
+                          		th:value="${currentBook.language}"
+                          	/> 
+            				<span class="text-danger" id="languageError" 
+            					th:text="${'Please provide language!'}" 
+            					style="visibility: hidden">
+            				</span>
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Published Year:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="publishedYear"
+                          		name="publishedYear"  
+                          		th:placeholder="${'Enter published year'}"
+                          		th:onkeypress="return validateNumber(event)"  
+                          		th:value="${currentBook.publishedYear}"                       		
+                          	/> 
+            				<span class="text-danger" id="publishedYearError" 
+            					th:text="${'Please provide valid year!'}" 
+            					style="visibility: hidden">
+            				</span>
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Page Number:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="pageNumber"
+                          		name="pageNumber"  
+                          		th:placeholder="${'Enter page number'}"
+                          		th:onkeypress="return validateNumber(event)" 
+                          		th:value="${currentBook.pageNumber}"                        		
+                          	/> 
+            				<span class="text-danger" id="pageNumberError" 
+            					th:text="${'Please provide valid number!'}" 
+            					style="visibility: hidden">
+            				</span>
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Price:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="price"
+                          		name="price"  
+                          		th:placeholder="${'Enter book price'}"
+                          		th:onkeypress="return validateNumber(event)" 
+                          		th:value="${currentBook.price}"                        		
+                          	/> 
+            				<span class="text-danger" id="priceError" 
+            					th:text="${'Please provide valid price!'}" 
+            					style="visibility: hidden">
+            				</span>
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Book Cover:'}"></label>
+                          	<select class="form-control" id="cover" name="cover" >
+           					 	<option th:value="''" th:text="${'Please Select'}"></option>
+            					<option th:each="tempCover : ${book.covers.values()}" 
+            						th:value="${tempCover}" 
+            						th:text="${tempCover}" >
+    							</option>
+        					</select>
+            				<span class="text-danger" id="coverError" 
+            					th:text="${'Please select book cover!'}" 
+            					style="visibility: hidden">
+            				</span>
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Book Letter:'}"></label>
+                          	<select class="form-control" id="letter" name="letter">
+           					 	<option th:value="''" th:text="${'Please Select'}"></option>
+            					<option th:each="tempLetter : ${book.letters.values()}" 
+            						th:value="${tempLetter}" 
+            						th:text="${tempLetter}" >
+    							</option>
+        					</select>
+            				<span class="text-danger" id="letterError" 
+            					th:text="${'Please select book letter!'}" 
+            					style="visibility: hidden">
+            				</span>
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Book Genre:'}"></label>
+                          	<select class="form-control" id="genreId" name="genreId" >
+           					 	<option th:value="''" th:text="${'Please Select'}"></option>
+            					<option th:each="tempGenre : ${allGenres}" 
+            						th:value="${tempGenre.genreId}" 
+            						th:text="${tempGenre.name}" >
+    							</option>
+        					</select>
+            				<span class="text-danger" id="genreError" 
+            					th:text="${'Please select book genre!'}" 
+            					style="visibility: hidden">
+            				</span>
+                    	</div>
+                    	
+                    	<div class="mb-5 col-md-12">
+                        	<label class="form-label" th:text="${'Browse Image:'}"></label>
+                          	<input 
+                          		type="file" 
+                          		name="bookImage"  
+                          		accept="image/jpg, image/jpeg, image/png"                      		
+                          	/> 
+                    	</div>
+                    	
+                    	<input type="hidden" name="imgName"  th:value="${book.imageName}" />						                                                                                                                                                                                 
+    		
+    					<div class="text-center">
+    						<button type="submit" 
+    							class="btn btn-info"
+    							th:text="${'Update'}">
+    						</button>
+    					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		var element = document.getElementById("bookForm");
+		element.addEventListener("submit", event => {
+  			event.preventDefault();
+  			executeBookForm();
+		});
+	</script>
+
+</th:block>

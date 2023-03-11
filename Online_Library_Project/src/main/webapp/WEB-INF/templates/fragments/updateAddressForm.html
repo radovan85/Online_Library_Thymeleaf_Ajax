@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+
+<th:block th:fragment="ajaxLoadedContent">
+
+<div class="container" 
+	style="margin-top: 120px;margin-bottom: 100px;font-family: Rajdhani, sans-serif;color: #12044F;font-weight: 700;">
+		<div class="text-center text-uppercase pt-3"> 
+        	<h3 th:text="${'Delivery Address Update Form'}"></h3>
+            <hr>
+       	</div>
+            
+        <div class="row mt-2">
+            <div  class="col-md-6 offset-md-3 sigup_form">
+            	<div class="sigup_form">
+        			<form class="mt-3" method="POST" th:object="${address}" id="addressForm">
+        	
+        				<input type="hidden" name="deliveryAddressId" th:value="${currentAddress.deliveryAddressId}">
+        				
+        				<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Address:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="address"
+                          		name="address"  
+                          		th:placeholder="${'Enter Address'}"
+                          		th:value="${currentAddress.address}"
+                          	/> 
+            				<span id="addressError" class="text-danger" 
+            					th:style="${'visibility: hidden'}" 
+            					th:text="${'Please Provide Address!'}">
+            				</span>   
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'City:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="city"
+                          		name="city"  
+                          		th:placeholder="${'Enter City'}"
+                          		th:value="${currentAddress.city}"
+                          	/> 
+            				<span id="cityError" class="text-danger" 
+            					th:style="${'visibility: hidden'}" 
+            					th:text="${'Please Provide City!'}">
+            				</span>   
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'State:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="state"
+                          		name="state"  
+                          		th:placeholder="${'Enter State'}"
+                          		th:value="${currentAddress.state}"
+                          	/> 
+            				<span id="stateError" class="text-danger" 
+            					th:style="${'visibility: hidden'}" 
+            					th:text="${'Please Provide State!'}">
+            				</span>   
+                    	</div>
+                    	
+                    	<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Zip Code:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="zipcode"
+                          		name="zipcode"  
+                          		th:placeholder="${'Enter Zip Code'}"
+                          		th:value="${currentAddress.zipcode}"
+                          	/> 
+            				<span id="zipcodeError" class="text-danger" 
+            					th:style="${'visibility: hidden'}" 
+            					th:text="${'Please Provide Zip Code!'}">
+            				</span>   
+                    	</div>
+                    	
+                    	<div class="mb-5 col-md-12">
+                        	<label class="form-label" th:text="${'Country:'}"></label>
+                          	<input 
+                          		type="text" 
+                          		class="form-control" 
+                          		id="country"
+                          		name="country"  
+                          		th:placeholder="${'Enter Country'}"
+                          		th:value="${currentAddress.country}"
+                          	/> 
+            				<span id="countryError" class="text-danger" 
+            					th:style="${'visibility: hidden'}" 
+            					th:text="${'Please Provide Country!'}">
+            				</span>   
+                    	</div>
+        	                                                                                                                    
+            			<div class="text-center">
+            				<button type="submit" 
+            					class="btn btn-info"
+            					th:text="${'Update'}">
+            				</button>
+            			</div>
+            		</form>                                 
+      			</div>
+   			</div>
+   		</div>
+   	</div>
+       
+    <script>
+    	deliveryAddressInterceptor("addressForm");
+    </script>     
+</th:block>

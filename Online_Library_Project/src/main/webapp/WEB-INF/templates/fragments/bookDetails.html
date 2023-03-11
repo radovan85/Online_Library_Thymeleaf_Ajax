@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+
+<th:block th:fragment="ajaxLoadedContent">
+
+	<div class="container" 
+		style="margin-top: 120px;margin-bottom: 150px;font-family: Rajdhani, sans-serif;color: #12044F;font-weight: 700;">
+		
+		<div class="text-center mb-5">
+			<h2>Book Details</h2>
+		</div>
+		
+		<table class="table table-bordered" th:style="${'color: #12044F;'}">
+			<tbody>
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Book Image
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">
+						<img th:src="@{${currentBook.getMainImagePath()}}"
+						width="30%" height="150px" alt="${currentBook.name}" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Book Id
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;" th:text="${currentBook.bookId}">
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">ISBN
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;" th:text="${currentBook.ISBN}">
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Publisher
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;" th:text="${currentBook.publisher}">
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Author
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;" th:text="${currentBook.author}">
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Description
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;" th:text="${currentBook.description}">
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Language
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;" th:text="${currentBook.language}">
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Year Published
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;" th:text="${currentBook.publishedYear}">
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Page Number
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;" th:text="${currentBook.pageNumber}">
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Price
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;"> 
+						<span>&euro;</span>
+						<span th:text="${currentBook.price} % 1 == 0 ? ${currentBook.price}  
+						:${#numbers.formatDecimal(currentBook.price, 0, 2)} "></span>
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Rating
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;"> 
+						<th:block th:if="${currentBook.averageRating != null}">
+							<span th:text="${currentBook.averageRating}"></span>
+						</th:block>
+						
+						<th:block th:if="${currentBook.averageRating == null}">
+							<span th:text="${'No ratings'}"></span>
+						</th:block>
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Cover
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;" th:text="${currentBook.cover}">
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Letter
+					</td>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;" th:text="${currentBook.letter}">
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="text-center"
+						style="text-align: center; vertical-align: middle;">Genre
+					</td>
+					<td class="text-center"
+								style="text-align: center; vertical-align: middle;">
+						<th:block th:each="tempGenre : ${allGenres}">
+							<th:block th:if="${tempGenre.genreId == currentBook.genreId}">
+								<span th:text="${tempGenre.name}"></span>
+							</th:block>
+						</th:block>
+					</td>
+				</tr>
+				
+				<th:block sec:authorize="!hasAuthority('ADMIN')">
+					<tr>
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;">Actions
+						</td>
+						
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;">
+							<div class="dropdown">
+								<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                        			Actions
+                    			</button>
+								<div class="dropdown-menu">
+									<button class="dropdown-item" 
+										th:onclick="addToWishlist([[${currentBook.bookId}]])"
+										th:text="${'Add To Wish list'}">
+									</button>
+									<button class="dropdown-item"  
+										th:onclick="addToCart([[${currentBook.bookId}]])"
+										th:text="${'Add To Cart'}">
+									</button>
+									<button class="dropdown-item" 
+										th:onclick="addReview([[${currentBook.bookId}]])"
+										th:text="${'Add Review'}">
+									</button>
+								</div>
+							</div>
+						</td>
+					</tr>
+				
+					
+				</th:block>
+			</tbody>
+		</table>
+		
+		<th:block sec:authorize="isAuthenticated()" th:if="${allReviews.size() > 0}">
+			<div class="mt-5">
+			
+				<input type="hidden" id="recordsPerPage" th:value="${recordsPerPage}">
+				<table class="table table-bordered table-info" id=listingTable>
+					<thead class="table-secondary">
+						<tr>
+							<th th:text="${'Author'}"></th>
+							<th th:text="${'Text'}"></th>
+							<th th:text="${'Rating'}"></th>
+							<th th:text="${'Date'}"></th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr th:each="tempReview : ${allReviews}">
+							<th:block th:each="tempAuthor : ${allCustomers}">
+								<th:block th:each="tempUser : ${allUsers}">
+									<th:block th:if="${tempReview.authorId == tempAuthor.customerId}">
+										<th:block th:if="${tempAuthor.userId == tempUser.id}">
+											<td th:text="${tempUser.firstName + ' ' + tempUser.lastName}"></td>
+											<td th:text="${tempReview.text}"></td>
+											<td th:text="${tempReview.rating}"></td>
+											<td th:text="${tempReview.createdAtStr}"></td>
+										</th:block>
+									</th:block>
+								</th:block>
+							</th:block>
+						</tr>
+					</tbody>
+				</table>
+				
+				<div style="float: right">
+           			<button th:onclick="prevPage()" id="btn_prev">Prev</button>
+					page: <span id="page"></span>
+					<button th:onclick="nextPage()" id="btn_next">Next</button>
+				</div>
+			
+				<script th:src="@{/js/pagination.js}"></script>
+				<script>
+					$(document).ready(function() {
+	 			 		changePage(1);
+					});
+				</script>
+			</div>
+		</th:block>
+		
+		<div class="text-center mt-5">
+			<button class="btn btn-info" th:onclick="redirectAllBooks()">All Books</button>
+		</div>
+	</div>
+</th:block>

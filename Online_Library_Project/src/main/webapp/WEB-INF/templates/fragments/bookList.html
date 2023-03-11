@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+
+<th:block th:fragment="ajaxLoadedContent">
+
+	<div class="container" 
+		style="margin-top: 120px;margin-bottom: 150px;font-family: Rajdhani, sans-serif;color: #12044F;font-weight: 700;">
+		
+		<th:block th:if="${allBooks.size == 0}">
+			<div class="text-center">		
+				<h1>No books available currently</h1>
+				<th:block sec:authorize="hasAuthority('ADMIN')">
+				<button class="btn btn-info border-dark mt-5"
+					th:onclick="redirectBookForm()"
+					th:text="${'Add Book'}">
+				</button>
+			</div>
+		</th:block>
+	
+		<th:block th:if="${allBooks.size > 0}">										
+			<div class="row">
+        		<div class="col-lg-6 mx-auto">
+            		<div class="input-group">
+                		<input 
+                			type="text" 
+                			class="form-control"
+                			id="keyword" 
+                			th:placeholder="${'Enter keyword'}">
+                		<span class="input-group-btn">
+                    		<button class="btn btn-secondary" type="button" 
+                    			id="searchButton"
+                    			th:text="${'Go!'}">
+                    		</button>
+                		</span>
+            		</div>
+            		<span id="keywordError" class="text-danger" 
+ 							style="visibility: hidden"
+ 							th:text="${'Please provide keyword'}" >
+ 					</span>
+        		</div>
+    		</div>
+			
+			
+			<div class="text-center mt-5">
+				<h1 th:text="${'Books List'}"></h1>
+			</div>
+			
+			<th:block sec:authorize="hasAuthority('ADMIN')">
+				<div class="mt-5">
+					<button class="btn btn-info border-dark"
+						th:onclick="redirectBookForm()"
+						th:text="${'Add Book'}">		
+					</button>
+				</div>
+			</th:block>
+			
+			<div class="d-inline-flex mt-3">
+				<button class="btn btn-danger mr-3" 
+					th:onclick="redirectAllBooks()"
+					th:text="${'Default Order'}">
+				</button>
+				
+				<button class="btn btn-danger mr-3" 
+					th:onclick="redirectAllBooksById()"
+					th:text="${'Book Id Order'}">
+				</button>
+				
+				<button class="btn btn-danger mr-3" 
+					th:onclick="redirectAllBooksByPrice()"
+					th:text="${'Price Order'}">
+				</button>
+				
+				<button class="btn btn-danger" 
+					th:onclick="redirectAllBooksByRating()"
+					th:text="${'Rating Order'}">
+				</button>
+			</div>
+			
+			<input type="hidden" id="recordsPerPage" th:value="${recordsPerPage}">
+			<table class="table table-bordered table-hover mt-4" id="listingTable" >
+				<thead class="table-danger">
+					<tr>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;">Screenshot
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;">Book Id
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;">Name
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;">Author
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;">Price
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;">Average Rating
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;">Actions
+						</th>
+					</tr>
+				</thead>
+				
+				<tbody class="table-secondary">
+					<tr th:each="tempBook : ${allBooks}">
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;">
+							<img th:src="@{${tempBook.getMainImagePath()}}"
+							style="max-height: 90px;width: 110px;"/>
+						</td>
+						
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${tempBook.bookId}">
+						</td>
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${tempBook.name}">
+						</td>
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${tempBook.author}">
+						</td>
+						
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;"> 
+							<span>&euro;</span>
+							<span th:text="${tempBook.price} % 1 == 0 ? ${tempBook.price} :${#numbers.formatDecimal(tempBook.price, 0, 2)}">
+							</span>
+						</td>
+						
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;">
+						<th:block th:if="${tempBook.averageRating != null}"> 
+							<span th:text="${tempBook.averageRating} % 1 == 0 ? 
+							${tempBook.averageRating} :${#numbers.formatDecimal(tempBook.averageRating, 0, 2)} "></span>
+						</th:block>
+						<th:block th:if="${tempBook.averageRating == null}">
+							<span th:text="${'No ratings'}"></span>
+						</th:block>
+						</td>
+						
+						
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;">
+							<div class="dropdown">
+								<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                        			th:text="${'Actions'}">
+                    			</button>
+								<div class="dropdown-menu">
+									<button class="dropdown-item" 
+										th:onclick="viewBookDetails([[${tempBook.bookId}]])"
+										th:text="${'Details'}">
+									</button>
+									<th:block sec:authorize="hasAuthority('ADMIN')">
+										<button class="dropdown-item"  
+											th:onclick="redirectUpdateBook([[${tempBook.bookId}]])"
+											th:text="${'Update'}">
+										</button>
+										<button class="dropdown-item btn btn-danger" 
+											th:onclick="deleteBook([[${tempBook.bookId}]])"
+											th:text="${'Delete'}">
+										</button>
+									</th:block>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<div style="float: right">
+           		<button th:onclick="prevPage()" id="btn_prev">Prev</button>
+				page: <span id="page"></span>
+				<button th:onclick="nextPage()" id="btn_next">Next</button>
+			</div>
+			
+			<script th:src="@{/js/pagination.js}"></script>
+			<script>
+				$(document).ready(function() {
+	 			 	changePage(1);
+				});
+			</script>
+		
+		
+			<script>
+		
+				$("#searchForm").submit(function(event) {
+		    		event.preventDefault();
+				});
+
+				$("#searchButton").on("click", function () {
+					var keyword = $("#keyword").val();
+					if(validateKeyword()){
+						$("#ajaxLoadedContent").load("/books/searchBooks" + "?keyword=" + keyword);
+					};
+				});
+	
+			
+			</script>
+		</th:block>
+	</div>
+</th:block>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+
+<th:block th:fragment="ajaxLoadedContent">
+	
+	<div class="container inner" 
+		style="margin-top: 120px;margin-bottom: 100px;font-family: Rajdhani, sans-serif;color: #12044F;font-weight: 700;">
+		<div class="text-center text-uppercase pt-3">
+			<h3 th:text="${book.name}"></h3>
+        	<h3 th:text="${'Review Form'}"></h3>
+            <hr>
+       	</div>
+            
+        <div class="row mt-2">
+            <div  class="col-md-6 offset-md-3 sigup_form">
+            	<div class="sigup_form">
+					<form class="mt-3" method="POST" id="reviewForm"  th:object="${review}"  style="margin-bottom: 75px">
+				
+						<input type="hidden" name="bookId" th:value="${book.bookId}">
+						
+						<div class="mb-3 col-md-12">
+                        	<label class="form-label" th:text="${'Text:'}"></label>
+                          	<textarea 
+                          		class="form-control" 
+                          		id="text"
+                          		name="text"  
+                          		th:placeholder="${'Enter Review Text'}">
+                          	</textarea> 
+            				<span  class="text-danger" id="textError" 
+            					th:text="${'Please provide text!'}" 
+            					th:style="${'visibility: hidden'}">
+            				</span>   
+                    	</div>
+                    	
+                    	<div class="mb-5 col-md-12">
+                        	<label class="form-label" th:text="${'Rating:'}"></label>
+                          	<select class="form-control" id="rating" name="rating">
+           					 	<option th:value="''" th:text="${'Please Select'}"></option>
+            					<option th:each="ratingValue : ${ratings}" 
+            						th:value="${ratingValue}" 
+            						th:text="${ratingValue}" >
+    							</option>
+        					</select>
+            				<span class="text-danger" id="ratingError" 
+            					th:text="${'Please rate the book!'}" 
+            					th:style="${'visibility: hidden'}">
+            				</span> 
+                    	</div>						        	        		
+            
+            			<div class="text-center">
+    						<button type="submit" class="btn btn-info"
+    							th:text="${'Submit'}">
+    						</button>
+    					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+	<script>
+		reviewInterceptor("reviewForm");
+	</script>
+
+</th:block>

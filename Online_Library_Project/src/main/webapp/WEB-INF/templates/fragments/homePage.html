@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+
+
+
+	<th:block th:fragment="ajaxLoadedContent">
+	
+	<div class="middle">
+        <ul>
+            <li><img th:src="@{/images/carouselImages/image_01.png}" alt=""></li>
+            <li><img th:src="@{/images/carouselImages/image_02.jpg}" alt=""></li>
+            <li><img th:src="@{/images/carouselImages/image_03.jpg}" alt=""></li>
+            <li><img th:src="@{/images/carouselImages/image_04.jpg}" alt=""></li>
+        </ul>
+    </div>
+    
+	<div class="container" align="center" style="margin-top: -60px;font-family: Rajdhani, sans-serif;color: #b90825">
+		<h1 th:text="${'Welcome To Online Library'}"></h1>
+	</div>
+	
+	</th:block>

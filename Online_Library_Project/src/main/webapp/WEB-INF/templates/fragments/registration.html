@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+
+	<th:block th:fragment="ajaxLoadedContent">
+	
+		<div class="container inner" 
+			style="margin-top: 120px;margin-bottom: 100px;font-family: Rajdhani, sans-serif;color: #12044F;font-weight: 700;">
+			<div class="text-center text-uppercase pt-3"> 
+        		<h3 th:text="${'Registration Form'}"></h3>
+            	<hr>
+       		</div>
+            
+        	<div class="row mt-2">
+            	<div  class="col-md-6 offset-md-3 sigup_form">
+            		<div class="sigup_form">
+        				<form class="mt-3" method="POST" id="registrationForm" name="registrationForm" th:object="${tempForm}" >
+        			
+        					<div class="mb-3 col-md-12">
+                        		<label class="form-label" th:text="${'First Name:'}"></label>
+                          		<input 
+                          			type="text" 
+                          			class="form-control" 
+                          			id="firstName"
+                          			th:field="*{user.firstName}"  
+                          			th:placeholder="${'Enter First Name'}"
+                          		/> 
+            					<span id="firstNameError" class="text-danger" 
+            						th:style="${'visibility: hidden;'}" 
+            						th:text="${'Please Provide First Name!'}">
+            					</span>   
+                    		</div>
+                    		
+                    		<div class="mb-3 col-md-12">
+                        		<label class="form-label" th:text="${'Last Name:'}"></label>
+                          		<input 
+                          			type="text" 
+                          			class="form-control" 
+                          			id="lastName"
+                          			th:field="*{user.lastName}"  
+                          			th:placeholder="${'Enter Last Name'}"
+                          		/> 
+            					<span id="lastNameError" class="text-danger" 
+            						th:style="${'visibility: hidden;'}" 
+            						th:text="${'Please Provide Last Name!'}">
+            					</span>   
+                    		</div>
+                    		
+                    		<div class="mb-3 col-md-12">
+                        		<label class="form-label" th:text="${'Email:'}"></label>
+                          		<input 
+                          			type="text" 
+                          			class="form-control" 
+                          			id="email"
+                          			th:field="*{user.email}"  
+                          			th:placeholder="${'Enter Email Address'}"
+                          		/> 
+            					<span id="emailError" class="text-danger" 
+            						th:style="${'visibility: hidden;'}" 
+            						th:text="${'Please Provide Valid Email!'}">
+            					</span>   
+                    		</div>
+                    		
+                    		<div class="mb-3 col-md-12">
+                        		<label class="form-label" th:text="${'Password:'}"></label>
+                          		<input 
+                          			type="password" 
+                          			class="form-control" 
+                          			id="password"
+                          			th:field="*{user.password}"  
+                          			th:placeholder="${'Enter Password'}"
+                          		/> 
+            					<span id="passwordError" class="text-danger" 
+            						th:style="${'visibility: hidden;'}" 
+            						th:text="${'Please Provide Password!'}">
+            					</span>   
+                    		</div>
+                    		
+                    		<div class="mb-3 col-md-12">
+                        		<label class="form-label" th:text="${'Confirm Password:'}"></label>
+                          		<input 
+                          			type="password" 
+                          			class="form-control" 
+                          			id="confirmpass"                         			
+                          			th:placeholder="${'Confirm Password'}"
+                          		/>            					  
+                    		</div>
+        			
+        					<div class="mb-3 col-md-12">
+                        		<label class="form-label" th:text="${'Date Of Birth:'}"></label>
+                          		<input 
+                          			type="date" 
+                          			class="form-control" 
+                          			id="dateOfBirth"
+                          			th:field="*{customer.dateOfBirthStr}"                           		
+                          			th:required="${'required'}"
+                          		/> 
+            					<span id="birthdayError" class="text-danger" 
+            						th:style="${'visibility: hidden;'}" 
+            						th:text="${'Must Have 18 years!'}">
+            					</span> 
+                    		</div>
+                    		
+                    		<div class="mb-3 col-md-12">
+                        		<label class="form-label" th:text="${'Address:'}"></label>
+                          		<input 
+                          			type="text" 
+                          			class="form-control" 
+                          			id="address"
+                          			th:field="*{address.address}"  
+                          			th:placeholder="${'Enter Delivery Address'}"
+                          		/> 
+            					<span id="addressError" class="text-danger" 
+            						th:style="${'visibility: hidden;'}" 
+            						th:text="${'Please Provide Delivery Address!'}">
+            					</span>    
+            				</div>
+            				
+            				<div class="mb-3 col-md-12">
+                        		<label class="form-label" th:text="${'City:'}"></label>
+                          		<input 
+                          			type="text" 
+                          			class="form-control" 
+                          			id="city"
+                          			th:field="*{address.city}"  
+                          			th:placeholder="${'Enter City'}"
+                          		/> 
+            					<span id="cityError" class="text-danger" 
+            						th:style="${'visibility: hidden;'}" 
+            						th:text="${'Please Provide City!'}">
+            					</span>       
+            				</div> 
+            				
+            				<div class="mb-3 col-md-12">
+                        		<label class="form-label" th:text="${'State:'}"></label>
+                          		<input 
+                          			type="text" 
+                          			class="form-control" 
+                          			id="state"
+                          			th:field="*{address.state}"  
+                          			th:placeholder="${'Enter State'}"
+                          		/> 
+            					<span id="stateError" class="text-danger" 
+            						th:style="${'visibility: hidden;'}" 
+            						th:text="${'Please Provide State!'}">
+            					</span>          
+            				</div> 
+            				
+            				<div class="mb-3 col-md-12">
+                        		<label class="form-label" th:text="${'Zip Code:'}"></label>
+                          		<input 
+                          			type="text" 
+                          			class="form-control" 
+                          			id="zipcode"
+                          			th:field="*{address.zipcode}"  
+                          			th:placeholder="${'Enter Zip Code'}"
+                          		/> 
+            					<span id="zipcodeError" class="text-danger" 
+            						th:style="${'visibility: hidden;'}" 
+            						th:text="${'Please Provide Zip Code!'}">
+            					</span>           
+            				</div>
+            				
+            				<div class="mb-5 col-md-12">
+                        		<label class="form-label" th:text="${'Country:'}"></label>
+                          		<input 
+                          			type="text" 
+                          			class="form-control" 
+                          			id="country"
+                          			th:field="*{address.country}"  
+                          			th:placeholder="${'Enter Country'}"
+                          		/> 
+            					<span id="countryError" class="text-danger" 
+            						th:style="${'visibility: hidden;'}" 
+            						th:text="${'Please Provide Country!'}">
+            					</span>          
+            				</div>        
+                    	        			      			            		            		            	            		            		           		           		           		            		           		            		            		            		            		            	          		
+            		
+            				<div class="text-center">
+               					<button class="btn btn-primary border-dark"  type="submit"
+               						th:onclick="return ValidatePassword()"               						
+                					th:text="${'Register'}">
+                				</button>
+            				</div>
+        				</form>       		
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			formInterceptor("registrationForm");
+		</script>
+	</th:block>

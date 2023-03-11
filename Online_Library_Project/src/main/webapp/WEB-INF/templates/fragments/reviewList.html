@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+
+<th:block th:fragment="ajaxLoadedContent">
+
+	<div class="container" 
+		style="margin-top: 120px;margin-bottom: 150px;font-family: Rajdhani, sans-serif;color: #12044F;font-weight: 700;">
+		<button class="btn btn-info mb-3" 
+			th:onclick="redirectAllRequestedReviews()"
+			th:text="${'Pending Reviews'}">
+		</button>
+	
+	
+		<th:block th:if="${approvedReviews.size == 0}">
+			<div class="text-center">
+				<h1 th:text="${'No reviews currently'}"></h1>
+				<button class="btn btn-secondary border-dark mt-5"
+					th:onclick="redirectHome()"
+					th:text="${'Home Page'}">
+				</button>
+			</div>
+		</th:block>
+	
+		<th:block th:if="${approvedReviews.size > 0}">
+			<div class="text-center mb-5">
+				<h1 th:text="${'Active Reviews'}"></h1>
+			</div>
+				
+			<input type="hidden" id="recordsPerPage" th:value="${recordsPerPage}">	
+			<table class="table table-bordered table-stripped table-hover" id="listingTable">
+				<thead class="table-dark">
+					<tr>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${'Rating'}">
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${'Book'}">
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${'Author'}">
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${'Actions'}">
+						</th>
+					</tr>
+				</thead>
+				
+				<tbody class="table-primary">
+					<tr th:each="tempReview : ${approvedReviews}">
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${tempReview.rating}">
+						</td>
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;">
+							<th:block th:each="tempBook : ${allBooks}">
+								<th:block th:if="${tempBook.bookId == tempReview.bookId}">
+									<span th:text="${tempBook.name}"></span>
+								</th:block>
+							</th:block>
+						</td>
+						
+						<td>
+							<th:block th:each="tempUser : ${allUsers}">
+								<th:block th:each="tempCustomer : ${allCustomers}">
+									<th:block th:if="${tempUser.id == tempCustomer.userId}">
+										<th:block th:if="${tempCustomer.customerId == tempReview.authorId}">
+											<span th:text="${tempUser.firstName + ' ' + tempUser.lastName}"></span>
+										</th:block>
+									</th:block>
+								</th:block>
+							</th:block>
+						</td>
+						
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;">
+							<button class="btn btn-secondary" th:onclick="redirectReviewDetails([[${tempReview.reviewId}]])">Details</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+				
+			<div style="float: right">
+           		<button th:onclick="prevPage()" id="btn_prev">Prev</button>
+				page: <span id="page"></span>
+				<button th:onclick="nextPage()" id="btn_next">Next</button>
+			</div>
+			
+			<script th:src="@{/js/pagination.js}"></script>
+			<script>
+				$(document).ready(function() {
+	 			 	changePage(1);
+				});
+			</script>
+		</th:block>
+	</div>
+</th:block>

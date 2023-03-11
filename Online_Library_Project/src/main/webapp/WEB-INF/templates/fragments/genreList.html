@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+
+<th:block th:fragment="ajaxLoadedContent">
+
+	<div class="container" 
+		style="margin-top: 120px;margin-bottom: 150px;font-family: Rajdhani, sans-serif;color: #12044F;font-weight: 700;">
+		<th:block th:if="${allGenres.size == 0}">
+			<div class="text-center">
+				<h1 th:text="${'No genres available currently'}"></h1>
+				<button class="btn btn-info border-dark mt-5" 
+					th:onclick="redirectGenreForm()"
+					th:text="${'Add Genre'}">
+				</button>
+			</div>
+		</th:block>
+	
+		<th:block th:if="${allGenres.size > 0}">
+			<div class="text-center">
+				<h1 th:text="${'Genres List'}"></h1>
+			</div>
+			
+			<div class="mt-5 mb-4">
+				<button class="btn btn-info border-dark" 
+					th:onclick="redirectGenreForm()"
+					th:text="${'Add Genre'}">
+				</button>
+			</div>
+			
+			<input type="hidden" id="recordsPerPage" th:value="${recordsPerPage}">
+			<table class="table table-bordered table-stripped table-hover" id="listingTable">
+				<thead class="table-success">
+					<tr>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${'Id'}">
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${'Name'}">
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${'Description'}">
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${'Actions'}">
+						</th>
+					</tr>
+				</thead>
+				
+				<tbody class="table-warning">
+					<tr th:each="tempGenre : ${allGenres}" >
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${tempGenre.genreId}">
+						</td>
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${tempGenre.name}">
+						</td>
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${tempGenre.description}">
+						</td>
+						
+						<td class="text-center"
+							style="text-align: center; vertical-align: middle;">
+							<div class="dropdown">
+								<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                        			Actions
+                    			</button>
+								<div class="dropdown-menu">
+									<button class="dropdown-item"  
+										th:onclick="redirectUpdateGenre([[${tempGenre.genreId}]])"
+										th:text="${'Update'}">
+									</button>
+									<button class="dropdown-item btn btn-danger" 
+										th:onclick="deleteGenre([[${tempGenre.genreId}]])"
+										th:text="${'Delete'}">
+									</button>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<div style="float: right">
+           		<button th:onclick="prevPage()" id="btn_prev">Prev</button>
+				page: <span id="page"></span>
+				<button th:onclick="nextPage()" id="btn_next">Next</button>
+			</div>
+			
+			<script th:src="@{/js/pagination.js}"></script>
+			<script>
+				$(document).ready(function() {
+	 			 	changePage(1);
+				});
+			</script>
+		</th:block>
+	</div>
+</th:block>

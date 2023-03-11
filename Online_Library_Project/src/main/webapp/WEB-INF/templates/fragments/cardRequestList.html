@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+
+<th:block th:fragment="ajaxLoadedContent">
+	<div class="container" 
+		style="margin-top: 120px;margin-bottom: 150px;font-family: Rajdhani, sans-serif;color: #12044F;font-weight: 700;">
+		<button class="btn btn-info" 
+			th:onclick="redirectAllCards()"
+			th:text="${'All Cards'}">
+		</button>
+		
+		<th:block th:if="${allRequests.size == 0}">
+			<div class="text-center mt-5">
+				<h1 th:text="${'No card requests currently'}"></h1>
+				<button class="btn btn-secondary border-dark mt-5"
+					th:onclick="redirectHome()"
+					th:text="${'Home Page'}">
+				</button>
+			</div>
+		</th:block>
+			
+		<th:block th:if="${allRequests.size > 0}">
+			<div class="text-center mb-5">
+				<h1 th:text="${'Loyalty Card Pendings'}"></h1>
+			</div>
+				
+			<input type="hidden" id="recordsPerPage" th:value="${recordsPerPage}">
+			<table class="table table-bordered table-stripped table-hover" id="listingTable">
+				<thead class="table-warning">
+					<tr>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${'Customer Id'}">
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${'Full Name'}">
+						</th>
+						<th class="text-center"
+							style="text-align: center; vertical-align: middle;" th:text="${'Actions'}">
+						</th>
+					</tr>
+				</thead>
+					
+				<tbody class="table-primary">
+					<tr th:each="tempUser : ${allUsers}">
+						<th:block th:each="tempCustomer : ${allCustomers}">
+							<th:block th:each="tempRequest : ${allRequests}">
+								<th:block th:if="${tempUser.id == tempCustomer.userId}">
+									<th:block th:if="${tempCustomer.customerId == tempRequest.customerId}">
+										<td class="text-center"
+											style="text-align: center; vertical-align: middle;" th:text="${tempCustomer.customerId}">
+										</td>
+										<td class="text-center"
+											style="text-align: center; vertical-align: middle;" th:text="${tempUser.firstName + ' ' + tempUser.lastName}">
+										</td>
+										<td class="text-center"
+											style="text-align: center; vertical-align: middle;">
+											<button class="btn btn-success" th:onclick="authorizeCard([[${tempRequest.id}]])">Accept</button>
+											<button class="btn btn-danger" th:onclick="denyCard([[${tempRequest.id}]])">Reject</button>
+										</td>
+									</th:block>
+								<th:block>
+							</th:block>
+						</th:block>
+					</tr>
+				</tbody>
+			</table>
+				
+			<div style="float: right">
+           		<button th:onclick="prevPage()" id="btn_prev">Prev</button>
+				page: <span id="page"></span>
+				<button th:onclick="nextPage()" id="btn_next">Next</button>
+			</div>
+			
+			<script th:src="@{/js/pagination.js}"></script>
+			<script>
+				$(document).ready(function() {
+	 			 	changePage(1);
+				});
+			</script>
+		</th:block>
+	</div>
+</th:block>
